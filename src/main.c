@@ -5,12 +5,28 @@
 ** main
 */
 
-#include "my_lists.h"
-#include "my_printf.h"
+#include <stdio.h>
+#include <string.h>
+
+#include "my_sudo.h"
+
+void
+print_usage(void)
+{
+    printf("usage: ./my_sudo -h\n");
+    printf("usage: ./my_sudo [-ugEs] [command [args ...]]\n");
+}
 
 int
-main(void)
+main(int ac, char **av)
 {
-    my_printf("Hello, World!\n");
-    return 0;
+    if (ac == 1){
+        print_usage();
+        return 84;
+    }
+    if (strcmp(av[1], "-h") == 0){
+        print_usage();
+        return 0;
+    }
+    return my_sudo(ac, av);
 }

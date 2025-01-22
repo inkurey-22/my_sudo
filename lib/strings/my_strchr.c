@@ -32,3 +32,18 @@ char *my_strrchr(char *str, char c)
     }
     return NULL;
 }
+
+char *my_strnchr(char *str, char c, int n)
+{
+    int i = 0;
+    int count = 0;
+
+    while (str[i] != '\0') {
+        if (str[i] == c)
+            count++;
+        if (count == n)
+            return &str[i];
+        i++;
+    }
+    return NULL;
+}

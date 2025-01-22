@@ -25,13 +25,16 @@ OBJ_DIR = obj
 
 # Files
 LIB	=	$(LIB_DIR)/libmy.a
-SRC	=	$(SRC_DIR)/main.c
+SRC	=	$(SRC_DIR)/main.c \
+		$(SRC_DIR)/sudo.c \
+		$(SRC_DIR)/get_flags.c \
+		$(SRC_DIR)/authenticate.c
 OBJ =	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 NAME	=	my_sudo
 
 # Compiler
 CC = gcc
-CFLAGS = -I$(INCLUDE_DIR) -Wall -Wextra -L$(LIB_DIR) -lmy
+CFLAGS = -I$(INCLUDE_DIR) -Wall -Wextra -L$(LIB_DIR) -lmy -lcrypt
 
 all: $(LIB) $(NAME)
 
@@ -39,7 +42,7 @@ $(LIB):
 	@$(MAKE) -C $(LIB_DIR)
 
 $(NAME): $(OBJ)
-	@$(CC) -o $(NAME) $(OBJ) -L$(LIB_DIR) -lmy
+	@$(CC) -o $(NAME) $(OBJ) -L$(LIB_DIR) -lmy -lcrypt
 	@echo -e "$(GREEN)[PROGRAM] $(BLUE)Program compiled$(NC)"
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -59,6 +62,10 @@ fclean: clean
 	@echo -e "$(GREEN)[PROGRAM] $(BLUE)Full clean$(NC)"
 
 re: fclean all
+
+run: all
+	@sudo chown root:root $(NAME)
+	@sudo chmod u+s $(NAME)
 
 debug: CFLAGS += -g
 debug: re

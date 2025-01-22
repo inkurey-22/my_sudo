@@ -60,10 +60,12 @@ auth(char *passwd_hash, char *user)
 int
 authenticate_and_run(char *passwd_hash, char *user, char **av)
 {
+    char *command = av[1];
+    char **args = &av[1];
+
     if (auth(passwd_hash, user) == 84)
         return 84;
-    if (av[2] != NULL)
-        return execlp(av[1], av[1], &av[1], NULL);
     else
-        return execlp(av[1], av[1], NULL);
+        execvp(command, args);
+    return 0;
 }

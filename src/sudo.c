@@ -20,24 +20,22 @@ get_usr_passwd(char *usr)
 {
     FILE *file = fopen("/etc/shadow", "r");
     char *line = NULL;
-    size_t len = 0;
     char *passwd_hash = NULL;
+    size_t len = 0;
     char **tab = NULL;
 
     if (file == NULL)
         return NULL;
-    do {
-        getline(&line, &len, file);
-        if (!line)
-            break;
-        if (strncmp(usr, line, strlen(usr)) == 0){
+    while (getline(&line, &len, file) != -1) {
+        if (strncmp(usr, line, strlen(usr)) == 0) {
             tab = split_string(line, ":");
             passwd_hash = strdup(tab[1]);
             free(tab);
             break;
         }
-    } while (line);
+    }
     fclose(file);
+    free(line);
     return passwd_hash;
 }
 

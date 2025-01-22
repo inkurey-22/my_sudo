@@ -14,41 +14,13 @@
 #include <string.h>
 #include <termios.h>
 
-char *
-get_salt(char *passwd_hash)
-{
-    char *salt = malloc(strlen(passwd_hash) + 1);
-    if (!salt)
-        return NULL;
-
-    int dollar_count = 0;
-    for (int i = 0; passwd_hash[i] != '\0'; i++) {
-        if (passwd_hash[i] == '$') {
-            dollar_count++;
-            if (dollar_count == 4) {
-                salt[i + 1] = '\0';
-                break;
-            }
-        }
-        salt[i] = passwd_hash[i];
-    }
-    return salt;
-}
-
 int
-auth(char *passwd_hash, char *user)
+query_loop(char *passwd_hash, char *user)
 {
     char *input = NULL;
-    struct termios oldt;
-    struct termios newt;
     size_t size = 0;
     char *hash = NULL;
-    char *salt = get_salt(passwd_hash);
 
-    tcgetattr(0, &oldt);
-    newt = oldt;
-    newt.c_lflag &= ~ECHO;
-    tcsetattr(0, TCSANOW, &newt);
     for (int i = 0; i < 3; i++){
         printf("[my_sudo] password for %s: ", user);
         size = getline(&input, &size, stdin);
@@ -58,14 +30,30 @@ auth(char *passwd_hash, char *user)
         printf("\n");
         hash = crypt(input, passwd_hash);
         if (hash && strcmp(hash, passwd_hash) == 0){
-            tcsetattr(0, TCSANOW, &oldt);
             free(input);
             return 0;
         }
         printf("Sorry, try again.\n");
     }
-    tcsetattr(0, TCSANOW, &oldt);
     free(input);
+    return 84;
+}
+
+int
+auth(char *passwd_hash, char *user)
+{
+    struct termios oldt;
+    struct termios newt;
+
+    tcgetattr(0, &oldt);
+    newt = oldt;
+    newt.c_lflag &= ~ECHO;
+    tcsetattr(0, TCSANOW, &newt);
+    if (query_loop(passwd_hash, user) == 0){
+        tcsetattr(0, TCSANOW, &oldt);
+        return 0;
+    }
+    tcsetattr(0, TCSANOW, &oldt);
     return 84;
 }
 

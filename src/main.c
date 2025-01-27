@@ -18,7 +18,7 @@ print_usage(void)
 }
 
 int
-main(int ac, char **av)
+main(int ac, char **av, char **env)
 {
     if (ac == 1){
         print_usage();
@@ -28,5 +28,5 @@ main(int ac, char **av)
         print_usage();
         return 0;
     }
-    return my_sudo(ac, av);
+    return my_sudo(ac, av, env);
 }

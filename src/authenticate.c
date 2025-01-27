@@ -60,9 +60,18 @@ auth(char *passwd_hash, char *user)
 int
 authenticate_and_run(char *passwd_hash, char *user, char **av)
 {
-    char *command = av[1];
-    char **args = &av[1];
+    int i = 1;
+    char *command = NULL;
+    char **args = NULL;
 
+    while (av[i] && av[i][0] == '-') {
+        if (strcmp(av[i], "-u") == 0)
+            i += 2;
+        else
+            i++;
+    }
+    command = av[i];
+    args = &av[i];
     if (auth(passwd_hash, user) == 84)
         return 84;
     else

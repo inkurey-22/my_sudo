@@ -7,29 +7,25 @@
 
 #include "my_sudo.h"
 
+#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
 
 void
-check_arg(char *flag, flag_t *flags, int *i)
+check_arg(char **av, flag_t *flags, int *i)
 {
-    for (int j = 1; flag[j]; j++){
-        if (flag[j] == 'u'){
-            flags->u = flag[j + 1] ? &flag[j + 1] : NULL;
-            *i += 1;
-        }
-        if (flag[j] == 'g'){
-            flags->g = flag[j + 1] ? &flag[j + 1] : NULL;
-            *i += 1;
-        }
-        if (flag[j] == 'E'){
-            flags->E = true;
-            *i += 1;
-        }
-        if (flag[j] == 's'){
-            flags->s = true;
-            *i += 1;
-        }
+    if (strcmp(av[*i], "-u") == 0){
+        flags->u = strdup(av[*i + 1]);
+        (*i)++;
     }
+    if (strcmp(av[*i], "-g") == 0){
+        flags->g = strdup(av[*i + 1]);
+        (*i)++;
+    }
+    if (strcmp(av[*i], "-E") == 0)
+        flags->E = true;
+    if (strcmp(av[*i], "-s") == 0)
+        flags->s = true;
 }
 
 flag_t *
@@ -43,6 +39,6 @@ get_flags(int ac, char **av)
     flags->s = false;
     for (int i = 1; i < ac; i++)
         if (av[i][0] == '-')
-            check_arg(av[i], flags, &i);
+            check_arg(av, flags, &i);
     return flags;
 }

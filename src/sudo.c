@@ -45,8 +45,8 @@ my_getlogin(char **env)
     char *login = NULL;
 
     for (int i = 0; env[i] != NULL; i++) {
-        if (strncmp(env[i], "USER=", 5) == 0) {
-            login = strdup(env[i] + 5);
+        if (strncmp(env[i], "USERNAME=", 9) == 0) {
+            login = strdup(env[i] + 9);
             break;
         }
     }
@@ -66,5 +66,5 @@ my_sudo(int ac, char **av, char **env)
     passwd_hash = get_usr_passwd(flags->u);
     if (passwd_hash == NULL)
         return 84;
-    return authenticate_and_run(passwd_hash, flags->u, av);
+    return authenticate_and_run(passwd_hash, flags, av, env);
 }

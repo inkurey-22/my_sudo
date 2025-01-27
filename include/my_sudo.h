@@ -16,8 +16,8 @@ typedef struct flag_s {
     bool s;
 } flag_t;
 
-int my_sudo(int ac, char **av, char **env);
-int authenticate_and_run(char *passwd_hash, char *user, char **av);
-flag_t *get_flags(int ac, char **av);
+int my_sudo(int, char **, char **);
+int authenticate_and_run(char *, flag_t *, char **, char **);
+flag_t *get_flags(int, char **);
 
 #endif /* !MY_SUDO_H_ */

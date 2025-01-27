@@ -4,7 +4,7 @@
 ** File description:
 ** authentication
 */
-
+#define _GNU_SOURCE
 #include "my_sudo.h"
 
 #include <stdlib.h>
@@ -57,24 +57,46 @@ auth(char *passwd_hash, char *user)
     return 84;
 }
 
+int word_array_len(char **array)
+{
+    int i = 0;
+
+    for (; array[i] != NULL; i++);
+    return i;
+}
+
+char *get_shell(char **env)
+{
+    char *shell = NULL;
+
+    for (int i = 0; env[i] != NULL; i++) {
+        if (strncmp(env[i], "SHELL=", 6) == 0) {
+            shell = strdup(env[i] + 6);
+            break;
+        }
+    }
+    return shell;
+}
+
 int
-authenticate_and_run(char *passwd_hash, char *user, char **av)
+authenticate_and_run(char *passwd_hash, flag_t *flags, char **av, char **env)
 {
     int i = 1;
     char *command = NULL;
     char **args = NULL;
+    char *shell = get_shell(env);
+    char *shell_argv[] = { shell, NULL };
 
-    while (av[i] && av[i][0] == '-') {
+    for (; av[i] && av[i][0] == '-'; i++)
         if (strcmp(av[i], "-u") == 0)
-            i += 2;
-        else
             i++;
-    }
     command = av[i];
     args = &av[i];
-    if (auth(passwd_hash, user) == 84)
+    if (auth(passwd_hash, flags->u) == 84)
         return 84;
-    else
-        execvp(command, args);
-    return 0;
+    if (flags->s && word_array_len(av) == 2)
+        return execvp(shell, shell_argv);
+    if (flags->E)
+        return execvpe(command, args, env);
+    return execvp(command, args);
 }

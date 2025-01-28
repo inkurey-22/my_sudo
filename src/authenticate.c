@@ -65,17 +65,19 @@ int word_array_len(char **array)
     return i;
 }
 
-char *get_shell(char **env)
+int exec_command(flag_t *flags, char *command, char **args, char **env)
 {
-    char *shell = NULL;
+    char *shell = get_login_shell(flags->usr);
+    char *shell_argv[] = { shell, NULL };
+    int euid = my_geteuid(flags);
 
-    for (int i = 0; env[i] != NULL; i++) {
-        if (strncmp(env[i], "SHELL=", 6) == 0) {
-            shell = strdup(env[i] + 6);
-            break;
-        }
-    }
-    return shell;
+    if (seteuid(euid) == -1)
+        return 84;
+    if (flags->s && !command)
+        return execvp(shell, shell_argv);
+    if (flags->E)
+        return execvpe(command, args, env);
+    return execvp(command, args);
 }
 
 int
@@ -84,19 +86,13 @@ authenticate_and_run(char *passwd_hash, flag_t *flags, char **av, char **env)
     int i = 1;
     char *command = NULL;
     char **args = NULL;
-    char *shell = get_shell(env);
-    char *shell_argv[] = { shell, NULL };
 
     for (; av[i] && av[i][0] == '-'; i++)
         if (strcmp(av[i], "-u") == 0)
             i++;
     command = av[i];
     args = &av[i];
-    if (auth(passwd_hash, flags->u) == 84)
+    if (auth(passwd_hash, flags->usr) == 84)
         return 84;
-    if (flags->s && word_array_len(av) == 2)
-        return execvp(shell, shell_argv);
-    if (flags->E)
-        return execvpe(command, args, env);
-    return execvp(command, args);
+    return exec_command(flags, command, args, env);
 }

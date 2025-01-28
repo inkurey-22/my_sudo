@@ -39,31 +39,16 @@ get_usr_passwd(char *usr)
     return passwd_hash;
 }
 
-char *
-my_getlogin(char **env)
-{
-    char *login = NULL;
-
-    for (int i = 0; env[i] != NULL; i++) {
-        if (strncmp(env[i], "USERNAME=", 9) == 0) {
-            login = strdup(env[i] + 9);
-            break;
-        }
-    }
-    return login;
-}
-
 int
 my_sudo(int ac, char **av, char **env)
 {
     flag_t *flags = get_flags(ac, av);
     char *passwd_hash = NULL;
 
-    if (flags->u == NULL)
-        flags->u = my_getlogin(env);
-    if (flags->u == NULL)
+    flags->usr = my_getlogin();
+    if (flags->usr == NULL)
         return 84;
-    passwd_hash = get_usr_passwd(flags->u);
+    passwd_hash = get_usr_passwd(flags->usr);
     if (passwd_hash == NULL)
         return 84;
     return authenticate_and_run(passwd_hash, flags, av, env);

@@ -27,20 +27,14 @@ int is_user_or_group(char *str, char *user, char **groups)
 static int get_perms(FILE *file, char *user, char **groups)
 {
     char *line = NULL;
-    char **tab = NULL;
     size_t len = 0;
 
     while (getline(&line, &len, file) != -1) {
-        tab = split_string(line, ":");
-        if (!tab)
+        if (line[0] == '#' || line[0] == '\n' ||
+            strncmp(line, "Defaults", 8) == 0)
             continue;
-        if (tab[0][0] == '#') {
-            my_free_word_array(tab);
-            continue;
-        }
-        if (is_user_or_group(tab[0], user, groups))
+        if (is_user_or_group(line, user, groups))
             return 0;
-        my_free_word_array(tab);
     }
     free(line);
     return 84;

@@ -29,11 +29,23 @@ int is_name_valid(char *name, FILE *file)
     return 1;
 }
 
+static void
+wrong_user_group(char *str, int option)
+{
+    if (option == 1)
+        fprintf(stderr, "my_sudo: unknown user %s\n", str);
+    if (option == 2)
+        fprintf(stderr, "my_sudo: unknown group %s\n", str);
+    exit(1);
+}
+
 int check_flags(char *str, int option)
 {
     FILE *file;
     int res = 1;
 
+    if (!str)
+        exit(1);
     if (option != 1 && option != 2)
         return 0;
     if (option == 1)
@@ -42,12 +54,7 @@ int check_flags(char *str, int option)
         file = fopen("/etc/group", "r");
     res = is_name_valid(str, file);
     fclose(file);
-    if (!file || res == 1) {
-        if (option == 1)
-            fprintf(stderr, "my_sudo: unknown user %s\n", str);
-        if (option == 2)
-            fprintf(stderr, "my_sudo: unknown group %s\n", str);
-        exit(1);
-    }
+    if (!file || res == 1)
+        wrong_user_group(str, option);
     return res;
 }

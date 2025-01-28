@@ -30,6 +30,8 @@ SRC	=	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/get_flags.c \
 		$(SRC_DIR)/get_groups.c \
 		$(SRC_DIR)/authenticate.c \
+		$(SRC_DIR)/run.c \
+		$(SRC_DIR)/permissions.c \
 		$(SRC_DIR)/get_login.c \
 		$(SRC_DIR)/shell.c \
 		$(SRC_DIR)/euid.c

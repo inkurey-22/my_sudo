@@ -53,5 +53,7 @@ my_sudo(int ac, char **av, char **env)
     passwd_hash = get_usr_passwd(flags->usr);
     if (passwd_hash == NULL)
         return 84;
-    return authenticate_and_run(passwd_hash, flags, av, env);
+    if (auth(passwd_hash, flags->usr) || permissions(flags->usr, groups))
+        return 84;
+    return run(flags, av, env);
 }

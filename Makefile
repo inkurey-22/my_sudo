@@ -28,7 +28,10 @@ LIB	=	$(LIB_DIR)/libmy.a
 SRC	=	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/sudo.c \
 		$(SRC_DIR)/get_flags.c \
-		$(SRC_DIR)/authenticate.c
+		$(SRC_DIR)/authenticate.c \
+		$(SRC_DIR)/get_login.c \
+		$(SRC_DIR)/shell.c \
+		$(SRC_DIR)/euid.c
 OBJ =	$(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
 NAME	=	my_sudo
 

@@ -17,7 +17,7 @@ int execute_command(flag_t *flags, char *command, char **args, char **env)
     char *shell_argv[] = {shell, NULL};
     int euid = my_geteuid(flags);
 
-    if (seteuid(euid) == -1)
+    if (setuid(euid) == -1)
         return 84;
     if (flags->s && !command)
         return execvp(shell, shell_argv);

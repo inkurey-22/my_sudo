@@ -28,6 +28,7 @@ LIB	=	$(LIB_DIR)/libmy.a
 SRC	=	$(SRC_DIR)/main.c \
 		$(SRC_DIR)/sudo.c \
 		$(SRC_DIR)/get_flags.c \
+		$(SRC_DIR)/error_handling.c \
 		$(SRC_DIR)/get_groups.c \
 		$(SRC_DIR)/authenticate.c \
 		$(SRC_DIR)/run.c \

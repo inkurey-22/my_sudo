@@ -18,6 +18,7 @@ typedef struct flag_s {
 } flag_t;
 
 int my_sudo(int, char **, char **);
+int check_flags(char *, int option);
 int auth(char *, char *);
 int run(flag_t *, char **, char **);
 int permissions(char *, char **);

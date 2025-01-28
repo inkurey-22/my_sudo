@@ -67,6 +67,7 @@ SRC 	=   io/my_putnbr.c                   \
             strings/my_str_islower.c         \
             strings/my_strcapitalize.c       \
             strings/my_str_isprintable.c     \
+            strings/my_free_word_array.c     \
             lists/size.c                     \
             lists/sort.c                     \
             lists/find.c                     \

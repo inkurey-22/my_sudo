@@ -26,6 +26,7 @@ char *my_strchr(char *, char);
 char *my_strrchr(char *, char);
 char *my_strnchr(char *, char, int);
 char **split_string(char const *, char const *);
+void my_free_word_array(char **);
 
 // String Case Functions
 char *my_strcapitalize(char *);

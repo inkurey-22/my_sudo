@@ -57,14 +57,6 @@ auth(char *passwd_hash, char *user)
     return 84;
 }
 
-int word_array_len(char **array)
-{
-    int i = 0;
-
-    for (; array[i] != NULL; i++);
-    return i;
-}
-
 int exec_command(flag_t *flags, char *command, char **args, char **env)
 {
     char *shell = get_login_shell(flags->usr);

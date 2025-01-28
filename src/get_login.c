@@ -28,10 +28,10 @@ find_user(FILE *file, int uid)
             return NULL;
         if (atoi(tab[2]) == uid) {
             usr = strdup(tab[0]);
-            free(tab);
+            my_free_word_array(tab);
             break;
         }
-        free(tab);
+        my_free_word_array(tab);
     }
     free(line);
     return usr;

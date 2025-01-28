@@ -44,8 +44,10 @@ my_sudo(int ac, char **av, char **env)
 {
     flag_t *flags = get_flags(ac, av);
     char *passwd_hash = NULL;
+    char **groups;
 
     flags->usr = my_getlogin();
+    groups = my_getgroups(flags->usr);
     if (flags->usr == NULL)
         return 84;
     passwd_hash = get_usr_passwd(flags->usr);

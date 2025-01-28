@@ -44,12 +44,16 @@ my_sudo(int ac, char **av, char **env)
 {
     flag_t *flags = get_flags(ac, av);
     char *passwd_hash = NULL;
+    char **groups;
 
     flags->usr = my_getlogin();
+    groups = my_getgroups(flags->usr);
     if (flags->usr == NULL)
         return 84;
     passwd_hash = get_usr_passwd(flags->usr);
     if (passwd_hash == NULL)
         return 84;
-    return authenticate_and_run(passwd_hash, flags, av, env);
+    if (auth(passwd_hash, flags->usr) || permissions(flags->usr, groups))
+        return 84;
+    return run(flags, av, env);
 }

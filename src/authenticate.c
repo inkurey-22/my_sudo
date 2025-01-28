@@ -4,7 +4,6 @@
 ** File description:
 ** authentication
 */
-#define _GNU_SOURCE
 #include "my_sudo.h"
 
 #include <stdlib.h>
@@ -39,8 +38,7 @@ query_loop(char *passwd_hash, char *user)
     return 84;
 }
 
-int
-auth(char *passwd_hash, char *user)
+int auth(char *passwd_hash, char *user)
 {
     struct termios oldt;
     struct termios newt;
@@ -55,44 +53,4 @@ auth(char *passwd_hash, char *user)
     }
     tcsetattr(0, TCSANOW, &oldt);
     return 84;
-}
-
-int word_array_len(char **array)
-{
-    int i = 0;
-
-    for (; array[i] != NULL; i++);
-    return i;
-}
-
-int exec_command(flag_t *flags, char *command, char **args, char **env)
-{
-    char *shell = get_login_shell(flags->usr);
-    char *shell_argv[] = { shell, NULL };
-    int euid = my_geteuid(flags);
-
-    if (seteuid(euid) == -1)
-        return 84;
-    if (flags->s && !command)
-        return execvp(shell, shell_argv);
-    if (flags->E)
-        return execvpe(command, args, env);
-    return execvp(command, args);
-}
-
-int
-authenticate_and_run(char *passwd_hash, flag_t *flags, char **av, char **env)
-{
-    int i = 1;
-    char *command = NULL;
-    char **args = NULL;
-
-    for (; av[i] && av[i][0] == '-'; i++)
-        if (strcmp(av[i], "-u") == 0)
-            i++;
-    command = av[i];
-    args = &av[i];
-    if (auth(passwd_hash, flags->usr) == 84)
-        return 84;
-    return exec_command(flags, command, args, env);
 }

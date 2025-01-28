@@ -37,7 +37,7 @@ int run(flag_t *flags, char **av, char **env)
             i++;
     command = av[i];
     args = &av[i];
-    if ((flags->u || flags->g) && !command)
+    if ((flags->u || flags->g) && (!flags->s && !command))
         return 84;
     return execute_command(flags, command, args, env);
 }

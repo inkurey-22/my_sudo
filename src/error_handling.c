@@ -44,9 +44,9 @@ int check_flags(char *str, int option)
     fclose(file);
     if (!file || res == 1) {
         if (option == 1)
-            fprintf(stderr, "sudo: unknown user %s\n", str);
+            fprintf(stderr, "my_sudo: unknown user %s\n", str);
         if (option == 2)
-            fprintf(stderr, "sudo: unknown group %s\n", str);
+            fprintf(stderr, "my_sudo: unknown group %s\n", str);
         exit(1);
     }
     return res;

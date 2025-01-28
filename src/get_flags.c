@@ -14,11 +14,11 @@
 void
 check_arg(char **av, flag_t *flags, int *i)
 {
-    if (strcmp(av[*i], "-u") == 0){
+    if (strcmp(av[*i], "-u") == 0 && !check_flags(av[*i + 1], 1)){
         flags->u = strdup(av[*i + 1]);
         (*i)++;
     }
-    if (strcmp(av[*i], "-g") == 0){
+    if (strcmp(av[*i], "-g") == 0 && !check_flags(av[*i + 1], 2)){
         flags->g = strdup(av[*i + 1]);
         (*i)++;
     }

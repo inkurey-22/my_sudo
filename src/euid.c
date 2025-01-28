@@ -20,7 +20,6 @@ int get_uid_from_name(char *name, FILE *file)
 
     while (getline(&line, &len, file) != -1) {
         token = strtok(line, ":");
-        free(line);
         if (token && strcmp(token, name) == 0) {
             strtok(NULL, ":");
             token = strtok(NULL, ":");
@@ -28,13 +27,11 @@ int get_uid_from_name(char *name, FILE *file)
             break;
         }
     }
-    fclose(file);
     free(line);
     return uid;
 }
 
-int
-my_geteuid(flag_t *flags)
+int my_geteuid(flag_t *flags)
 {
     FILE *file;
     int res = 0;

@@ -7,9 +7,13 @@
 
 #include "my_sudo.h"
 
+#include "my_strings.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
+
 
 void
 check_arg(char **av, flag_t *flags, int *i)

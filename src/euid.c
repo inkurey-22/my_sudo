@@ -43,12 +43,5 @@ int my_geteuid(flag_t *flags)
         res = get_uid_from_name(flags->u, file);
         fclose(file);
     }
-    if (flags->g) {
-        file = fopen("/etc/group", "r");
-        if (file == NULL)
-            return res;
-        res = get_uid_from_name(flags->g, file);
-        fclose(file);
-    }
     return res;
 }

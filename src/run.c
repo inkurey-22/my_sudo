@@ -39,5 +39,7 @@ int run(flag_t *flags, char **av, char **env)
     args = &av[i];
     if (!flags->s && !command)
         return 84;
-    return execute_command(flags, command, args, env);
+    if (execute_command(flags, command, args, env) != 0)
+        return 84;
+    return 0;
 }

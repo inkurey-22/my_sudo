@@ -36,7 +36,7 @@ wrong_user_group(char *str, int option)
         fprintf(stderr, "my_sudo: unknown user %s\n", str);
     if (option == 2)
         fprintf(stderr, "my_sudo: unknown group %s\n", str);
-    exit(1);
+    exit(84);
 }
 
 int check_flags(char *str, int option)
@@ -45,7 +45,7 @@ int check_flags(char *str, int option)
     int res = 1;
 
     if (!str)
-        exit(1);
+        exit(84);
     if (option != 1 && option != 2)
         return 0;
     if (option == 1)

@@ -47,6 +47,8 @@ int permissions(char *user, char **groups)
 
     if (!file)
         return 84;
+    if (strcmp(user, "root") == 0)
+        return 0;
     res = get_perms(file, user, groups);
     fclose(file);
     if (res == 84)

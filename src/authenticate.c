@@ -13,6 +13,15 @@
 #include <string.h>
 #include <termios.h>
 
+static void
+print_bad_password(int i)
+{
+    if (i == 2)
+        printf("sudo: 3 incorrect password attempts\n");
+    else
+        printf("Sorry, try again.\n");
+}
+
 int
 query_loop(char *passwd_hash, char *user)
 {
@@ -32,7 +41,7 @@ query_loop(char *passwd_hash, char *user)
             free(input);
             return 0;
         }
-        printf("Sorry, try again.\n");
+        print_bad_password(i);
     }
     free(input);
     return 84;

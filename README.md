@@ -13,7 +13,9 @@ Groups were composed of 2 students and 3 weeks were given.
 
 The whole standard C library was authorized except `etpw*`, `*getsp*`, `getgr*`, `*fork*`, `*clone*` and `openat*`.
 The main goal was to learn how `sudoers`, `shadow`, `passwd`... files worked and how permissions were managed.
+
 Flags `-ugEs` were mandatories.
+
 /!\ The parsing of the sudoers file is limited to users and groups (other options are skipped) and every mentionned user/group is assumed to have all permissions (`ALL=(ALL)   ALL`), with password required.
 
 ## Achievements
